@@ -2,19 +2,31 @@ function sprintf(format) {
   var args = Array.prototype.slice.call(arguments, 1);
   var index = 0;
 
-  return format.replace(/%(\d+\$)?([0-9]*)?(\.?[0-9]+)?([a-zA-Z%])/g, function (match, argIndex, width, precision, specifier) {
+  return format.replace(/%(\d+\$|\(([^)]+)\))?([0-9]*)?(\.?[0-9]+)?([a-zA-Z%])/g, function (match, argIndex, argName, width, precision, specifier) {
     if (match === '%%') return '%';
 
     // If the argument index is provided in the format string
-    if (argIndex) {
-      var idx = parseInt(argIndex, 10);
+    if (argIndex && argIndex !== '()') {
+      var idx = parseInt(argIndex.slice(0, -1), 10);
       if (idx <= args.length) {
         var arg = args[idx - 1];
         return processSpecifier(specifier, arg, width, precision);
       }
     }
+    
+    // If the argument name is provided in the format string
+    if (argName) {
+      var argIndex = args.findIndex(function (arg) {
+        return arg && argName in arg;
+      });
 
-    // If the argument index is not provided or is out of range,
+      if (argIndex !== -1) {
+        var arg = args[argIndex][argName];
+        return processSpecifier(specifier, arg, width, precision);
+      }
+    }
+
+    // If the argument index/name is not provided or is out of range,
     // fallback to sequential argument retrieval
     if (index < args.length) {
       var arg = args[index++];
