@@ -51,11 +51,15 @@ Uses:
 var name = 'John';
 var age = 25;
 var height = 1.85;
-var message = sprintf('My name is %s, I am %d years old, and my height is %.2f meters.', name, age, height);
+var message = sprintf('My name is %s, I am %d years old, and my height is %f meters.', name, age, height);
 console.log(message);
+
+var message2 = sprintf('My name is %2$s, I am %1$d years old, and my height is %f meters.', age, name, height);
+console.log(message2);
 
 Output:
 
 My name is John, I am 25 years old, and my height is 1.85 meters.
 
+My name is John, I am 25 years old, and my height is 1.85 meters.
 */
