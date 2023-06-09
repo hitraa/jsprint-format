@@ -1,9 +1,30 @@
 function sprintf(format) {
   var args = Array.prototype.slice.call(arguments, 1);
-  return format.replace(/%([a-zA-Z%])/g, function (match, specifier) {
+  var index = 0;
+
+  return format.replace(/%(\d+\$)?([a-zA-Z%])/g, function (match, argIndex, specifier) {
     if (match === '%%') return '%';
-    if (args.length === 0) return match;
-    var arg = args.shift();
+
+    // If the argument index is provided in the format string
+    if (argIndex) {
+      var idx = parseInt(argIndex, 10);
+      if (idx <= args.length) {
+        var arg = args[idx - 1];
+        return processSpecifier(specifier, arg);
+      }
+    }
+
+    // If the argument index is not provided or is out of range,
+    // fallback to sequential argument retrieval
+    if (index < args.length) {
+      var arg = args[index++];
+      return processSpecifier(specifier, arg);
+    }
+
+    return match;
+  });
+
+  function processSpecifier(specifier, arg) {
     switch (specifier) {
       case 's':
         return String(arg);
@@ -16,7 +37,7 @@ function sprintf(format) {
       default:
         return match;
     }
-  });
+  }
 }
 
 function vsprintf(format, args) {
