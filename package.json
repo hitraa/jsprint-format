@@ -1,8 +1,8 @@
 {
-  "name": "js-printf",
+  "name": "jsprint-format",
   "version": "1.0.0",
   "description": "",
-  "main": "js-printf.js",
+  "main": "jsprint-format.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
