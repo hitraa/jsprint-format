@@ -1,12 +1,46 @@
 {
   "name": "jsprint-format",
   "version": "1.0.0",
-  "description": "",
-  "main": "jsprint-format.js",
+  "type": "module",
+  "description": "Cross-platform PHP like sprintf/vsprintf formatting utility for browsers and Node.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:types": "tsc",
+    "build:bundle": "rollup -c",
+    "clean": "rm -r dist",
+    "prebuild": "npm run clean",
+    "build": "npm run build:types && npm run build:bundle",
+    "prepare": "npm run build",
+    "release": "npm run bump-version --",
+    "bump-version": "node libs/release.js",
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md && git commit --no-verify -m \"chore: update changelog\"",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "conventional-changelog": "^7.1.0",
+    "rollup": "^4.44.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Harshal Khairnar <harshal@hitraa.com>",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hitraa/jsprint-format"
+  }
 }
